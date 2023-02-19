@@ -34,6 +34,7 @@ public class RendezVousBusiness {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/rdv")
 	public boolean addRendezVous(RendezVous rendezVous){
 		int refLogement=rendezVous.getLogement().getReference();
 		Logement logement=logementMetier.getLogementsByReference(refLogement);
@@ -46,6 +47,7 @@ public class RendezVousBusiness {
 	@PUT
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
+	@Path("/rdv")
 	public boolean updateRendezVous(int idRendezVous, RendezVous rendezVous){
 		for(RendezVous r:listeRendezVous){
 			if(r.getId()==idRendezVous){
@@ -61,7 +63,7 @@ public class RendezVousBusiness {
 	}
 
 	@GET
-	@Path("/{id}")
+	@Path("/rdv/{id}")
 	public RendezVous getRendezVousById(@PathParam(value = "id") int id){
 		RendezVous rendezVous=null;
 		for(RendezVous r:listeRendezVous){
@@ -73,7 +75,7 @@ public class RendezVousBusiness {
 
 	@DELETE
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{id}")
+	@Path("/rdv/{id}")
 	public boolean deleteRendezVous(@PathParam(value = "id") int id){
 		Iterator<RendezVous> iterator=listeRendezVous.iterator();
 		while(iterator.hasNext()){
@@ -88,7 +90,7 @@ public class RendezVousBusiness {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{ref}")
+	@Path("/rdv/{ref}")
 	public List<RendezVous> getListeRendezVousByLogementReference(@PathParam(value="ref") int reference) {
 		List<RendezVous> liste=new ArrayList<RendezVous>();
 		for(RendezVous r:listeRendezVous){
@@ -101,7 +103,7 @@ public class RendezVousBusiness {
 	//ou bien avec un format xml
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/{ref}")
+	@Path("/rdv/{ref}")
 	public Response getListeRendezVousByLogementReferenceXML(@PathParam(value="ref") int reference) {
 		List<RendezVous> liste=new ArrayList<RendezVous>();
 		for(RendezVous r:listeRendezVous){
