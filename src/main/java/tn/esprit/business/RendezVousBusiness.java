@@ -11,7 +11,8 @@ import tn.esprit.entites.RendezVous;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
+import javax.ws.rs.core.Response.Status;
+@Path("/rendezvous")
 public class RendezVousBusiness {
 	List<RendezVous> listeRendezVous;
 	LogementBusiness logementMetier=new LogementBusiness();
@@ -34,14 +35,13 @@ public class RendezVousBusiness {
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Path("/rdv")
-	public boolean addRendezVous(RendezVous rendezVous){
+	public Response addRendezVous(RendezVous rendezVous){
 		int refLogement=rendezVous.getLogement().getReference();
 		Logement logement=logementMetier.getLogementsByReference(refLogement);
 		if(logement!=null){
 			rendezVous.setLogement(logement);
-			return listeRendezVous.add(rendezVous);}
-		return false;
+			return Response.status(Status.FOUND).entity(logement).build();}
+		return Response.status(Status.NOT_FOUND).entity("echec d'ajout").build();
 	}
 
 	@PUT
@@ -63,7 +63,7 @@ public class RendezVousBusiness {
 	}
 
 	@GET
-	@Path("/rdv/{id}")
+	@Path("/{id}")
 	public RendezVous getRendezVousById(@PathParam(value = "id") int id){
 		RendezVous rendezVous=null;
 		for(RendezVous r:listeRendezVous){
@@ -90,8 +90,7 @@ public class RendezVousBusiness {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/rdv/{ref}")
-	public List<RendezVous> getListeRendezVousByLogementReference(@PathParam(value="ref") int reference) {
+	public List<RendezVous> getListeRendezVousByLogementReference(@QueryParam(value="ref") int reference) {
 		List<RendezVous> liste=new ArrayList<RendezVous>();
 		for(RendezVous r:listeRendezVous){
 			if(r.getLogement().getReference()==reference)
@@ -99,20 +98,17 @@ public class RendezVousBusiness {
 		}
 		return liste;
 	}
-
-	//ou bien avec un format xml
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Path("/rdv/{ref}")
-	public Response getListeRendezVousByLogementReferenceXML(@PathParam(value="ref") int reference) {
-		List<RendezVous> liste=new ArrayList<RendezVous>();
-		for(RendezVous r:listeRendezVous){
-			if(r.getLogement().getReference()==reference)
-				return Response.status(Response.Status.FOUND).entity(r).build();
-		}
-		return Response.status(Response.Status.NOT_FOUND).build();
+	public  Response  displayRendezVous() {
+
+		if(listeRendezVous.size()!=0)
+			return Response.status(Status.FOUND).entity(listeRendezVous).build();
+		else
+			return Response.status(Status.NOT_FOUND).build();
+
 	}
-	
+
 	
 	
 
