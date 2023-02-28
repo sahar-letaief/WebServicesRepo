@@ -1,11 +1,11 @@
 type Student{
-    cin:String!
-    nompre:String!
-    email:String!
+    cin:String
+    nompre:String
+    email:String
 }
 
 type Query{
-    allStudents:[Student]
+    allStudents: [Student]
 }
 
 schema{
