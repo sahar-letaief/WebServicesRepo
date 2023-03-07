@@ -4,17 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tn.esprit.entites.Logement;
-import tn.esprit.entites.Logement.Type;;import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
-@Path("/logements")
+import tn.esprit.entites.Logement.Type;;
 public class LogementBusiness {
-	
+
 	private List<Logement> logements;
 
-	
+
 	public LogementBusiness() {
 		logements=new ArrayList<Logement>();
 		logements.add(new Logement(1,"27, Rue des roses", "El ghazela","Ariana",Type.Studio,"cuisine equipee",300f));
@@ -31,76 +26,51 @@ public class LogementBusiness {
 	public void setLogements(List<Logement> logements) {
 		this.logements = logements;
 	}
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getLogementsByReference(@QueryParam(value="reference") int reference){
-		
+
+	public Logement getLogementsByReference(int reference){
+
 		for (Logement l:logements){
 			if(l.getReference()==reference)
-				return Response.status(Status.FOUND).entity(l).build();
+				return l;
 		}
-		return  Response.status(Status.FOUND).entity("not found").build();
+		return null;
 	}
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-
-	public  Response  displaylogements() {
-
-		if(logements.size()!=0)
-			return Response.status(Status.FOUND).entity(logements).build();
-		else
-			return Response.status(Status.NOT_FOUND).build();
-
-	}
-
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getLogementsByDeleguation(@QueryParam(value="delegation") String deleguation){
+	public List<Logement> getLogementsByDeleguation(String deleguation){
 		List<Logement> liste=new ArrayList<Logement>();
 		for (Logement l:logements){
 			if(l.getDeleguation().equals(deleguation))
 				liste.add(l);
-			return Response.status(Status.FOUND).entity(l).build();
 		}
-		return Response.status(Status.ACCEPTED).entity(logements).build();
+		return liste;
 	}
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getLogementsByGouvernorat(@QueryParam(value="gouvernorat") String gouvernorat){
+	public List<Logement> getLogementsByGouvernorat(String gouvernorat){
 		List<Logement> liste=new ArrayList<Logement>();
 		for (Logement l:logements){
 			if(l.getGouvernorat().equals(gouvernorat))
 				liste.add(l);
-			return Response.status(Status.FOUND).entity(l).build();
 		}
-		return Response.status(Status.ACCEPTED).entity(logements).build();
+		return liste;
 	}
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getLogementsByType(@QueryParam(value="type") Type type){
+	public List<Logement> getLogementsByType(Type type){
 		List<Logement> liste=new ArrayList<Logement>();
 		for (Logement l:logements){
 			if(l.getType().equals(type))
 				liste.add(l);
-			return Response.status(Status.FOUND).entity(l).build();
 		}
-		return Response.status(Status.ACCEPTED).entity(logements).build();
+		return liste;
 	}
 
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response getLogementsByPrix(@QueryParam(value="prix") float prix){
+	public List<Logement> getLogementsByPrix(float prix){
 		List<Logement> liste=new ArrayList<Logement>();
 		for (Logement l:logements){
 			if(l.getPrix()<=prix)
 				liste.add(l);
-			return Response.status(Status.FOUND).entity(logements).build();
 		}
-		return Response.status(Status.ACCEPTED).entity(logements).build();
+		return liste;
 	}
-	
+
 
 }
